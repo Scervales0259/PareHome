@@ -15,13 +15,13 @@ const addListing = (req, res) => {
      res.render("listingRegistration", {isSession: req.session.isLoggedIn, id: req.session.sessionId});
 };
 
-const listingPage = (req, res) => {
+const listingPage = async (req, res) => {
      var listingId = req.params.id;
      console.log("GO TO: Listing Page with ID :"+ listingId);
 
-     Room.find({_id: new Object(listingId)}, function(err, result) {
-          User.find({_id: new Object(result[0].owner_id)},  function(err, users) {
-               Review.find({room_id: new Object(listingId)}, function(err,reviews){
+     await Room.find({_id: new Object(listingId)}, async function(err, result) {
+          await User.find({_id: new Object(result[0].owner_id)},  async function(err, users) {
+               await Review.find({room_id: new Object(listingId)}, function(err,reviews){
                     if (err) throw err;
                          res.render("listing", {id: req.session.sessionId, isSession: req.session.isLoggedIn, property: result[0], user:users[0],
                                    review: reviews});
@@ -30,11 +30,11 @@ const listingPage = (req, res) => {
      });
 };
 
-const deleteListing = (req, res) => {
+const deleteListing = async (req, res) => {
      var id = req.params.id;
-     Room.remove({_id: new Object(id)}, function(err, res) {
+     await Room.remove({_id: new Object(id)}, async function(err, res) {
           if (err) throw err;
-          User.find({_id: new Object(sessionId) }, function(err, result) {
+          await User.find({_id: new Object(sessionId) }, async function(err, result) {
                if(err) {
                     console.log(err);
                } else {
@@ -49,7 +49,7 @@ const deleteListing = (req, res) => {
                     console.log("description: "+result[0].description);
                     // console.table(result);
 
-                    Room.find({owner_id: result[0]._id.toString()}, function(err, rooms){
+                    await Room.find({owner_id: result[0]._id.toString()}, function(err, rooms){
                          if(err) {
                          console.log(err);
                          } else {
@@ -112,10 +112,10 @@ const deleteListing = (req, res) => {
 //      });
 // };
 
-const submitReview = (req, res) => {
+const submitReview = async (req, res) => {
      var room_ids = req.params.id;
  
-     User.findById(req.session.sessionId, function(err, user){
+     await User.findById(req.session.sessionId, async function(err, user){
          var review = new Review({
              room_id: room_ids,
              user_id: req.session.sessionId,
@@ -127,7 +127,7 @@ const submitReview = (req, res) => {
              username: user.user_name,
          });
  
-         review.save(function(err) {
+         await review.save(function(err) {
              if (err) throw err;
              res.redirect("/listingPage/"+room_ids);
          });

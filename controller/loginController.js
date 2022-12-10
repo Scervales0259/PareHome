@@ -6,14 +6,14 @@ const imageUploader = require('../controller/imageUploader');
 
 const bcrypt = require('bcrypt');
 
-const submit = (req, res) => {
+const submit = async (req, res) => {
      console.log("ROUTE: /login-submit");
      let username = (req.body.username).toLowerCase();
      let typedPassword = req.body.password;
 
      console.log(req.body);
  
-     User.find({user_name: username}, function(err, result) {
+     await User.find({user_name: username}, function(err, result) {
          if(result.length === 0) {
              res.render("login", {isCorrectCredentials: false, isSession: false});
              console.log("Username or Password is incorrect");

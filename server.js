@@ -56,10 +56,10 @@ const Review = require('./model/review');
 const User = require('./model/user');
 
 // Submit Sign Up
-app.post('/signup_submit', upload.array('profilePicture'), (req, res) => {
+app.post('/signup_submit', upload.array('profilePicture'), async(req, res) => {
     console.log("ROUTE: /signup_submit");
     
-    User.exists({username:'Gourav'}, function (err, doc) {
+    await User.exists({username:'Gourav'}, function (err, doc) {
         if (err){
             console.log(err)
         }else{
@@ -68,8 +68,8 @@ app.post('/signup_submit', upload.array('profilePicture'), (req, res) => {
     });
 
     // upload.array('bannerPicture');
-    bcrypt.hash(req.body.password, saltRounds).then(function(hash) {
-        const user = new User({
+    bcrypt.hash(req.body.password, saltRounds).then(async function(hash) {
+        const user = await new User({
             firstName: (req.body.firstName).toLowerCase(),
             lastName: (req.body.lastName).toLowerCase(),
             phone_number: req.body.phone_number,
@@ -86,7 +86,7 @@ app.post('/signup_submit', upload.array('profilePicture'), (req, res) => {
             // bannerPicture: "uploads/"+imagePath[1],
         });
     
-        user.save(function(err) {
+        await user.save(function(err) {
             if (err) {
                 console.log(err);
                 console.log("Sign Up Failed");
@@ -100,13 +100,13 @@ app.post('/signup_submit', upload.array('profilePicture'), (req, res) => {
     });
 });
 
-app.post("/uploadListing", upload.array('images'), function (req, response) {
+app.post("/uploadListing", upload.array('images'), async function (req, response) {
     for(var i = 0; i < imagePath.length; i++) {
         imagePath[i] = "uploads/" + imagePath[i];
         console.log(imagePath[i]);
     }
     console.log("ROUTE: /uploadListing");
-    const room = new Room({
+    const room = await new Room({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
@@ -141,7 +141,7 @@ app.post("/uploadListing", upload.array('images'), function (req, response) {
         images: imagePath,
     });
 
-    room.save(function(err) {
+    await room.save(function(err) {
         imagePath = [];
         console.log("Length of imagePath: " + imagePath.length);
         if (err) throw err;
