@@ -1,5 +1,6 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost:27017/PareHome");
+mongoose.connect("mongodb+srv://Scervales:" + process.env.ATLAS_PASSWORD + "@parehome.zthenka.mongodb.net/?retryWrites=true&w=majority");
 const Schema = mongoose.Schema;
 
 var reviewSchema = new Schema({

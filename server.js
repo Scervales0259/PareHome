@@ -10,6 +10,7 @@ const { application, response } = require("express");
 const { error } = require("console");
 const session = require('express-session');
 const saltRounds = 10;
+require('dotenv').config();
 
 const app = express();
 
