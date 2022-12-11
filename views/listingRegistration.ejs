@@ -18,15 +18,15 @@
                 <span>Apartment Name</span>
                 <input type="text" name="name" id="" required>
                 <span>Room ID</span>
-                <input type="text" name="room_id" id="">
+                <input type="text" name="room_id" id="" required>
                 <span>Total Occupancy</span>
-                <input type="number" name="total_occupancy" id="" min="1">
+                <input type="number" name="total_occupancy" id="" min="1" required>
                 <span>Total Bedrooms</span>
-                <input type="number" name="total_bedrooms" id="" min="1">
+                <input type="number" name="total_bedrooms" id="" min="1" required>
                 <span>Total Bathrooms</span>
-                <input type="number" name="total_bathrooms" id="" min="1">
+                <input type="number" name="total_bathrooms" id="" min="1" required>
                 <span>Description of the listing</span>
-                <textarea name="summary" id="" cols="30" rows="10"></textarea>
+                <textarea name="summary" id="" cols="30" rows="10" required></textarea>
                 <br>
                 <span>Address of the listing</span>
 
@@ -62,9 +62,9 @@
                 <span>Exact Address</span>
                 <input type="text" name="addressExactAddress" id="" placeholder="Address" required>
                 <span>Street</span>
-                <input type="text" name="addressStreet" id="">
+                <input type="text" name="addressStreet" id="" required>
                 <span>Postal Code</span>
-                <input type="number" name="addressPostalCode" id="">
+                <input type="number" name="addressPostalCode" id="" required>
 
                 <span>Has TV?</span>
                 <select id="" name="has_tv" required>
@@ -85,14 +85,14 @@
                 </select>
 
                 <span>Price Per Month</span>
-                <input type="number" name="price" id="">
+                <input type="number" name="price" id="" required>
 
                 <span>Images</span>
                 <input type="file" multiple accept="image/*" name="images" required>
                 <span>Nearest landmark</span>
                 <input type="text" name="addressNearestLandmark" id="" placeholder="Nearest landmark" required>
                 <span>Enter Google Map Embedded Link</span>
-                <input type="text" name="embeddedLink" id="">
+                <input type="text" name="embeddedLink" id="" required>
 
                 <input type="submit" value="Submit" class="btn">
             </form>
