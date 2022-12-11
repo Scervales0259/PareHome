@@ -15,13 +15,13 @@ const addListing = (req, res) => {
      res.render("listingRegistration", {isSession: req.session.isLoggedIn, id: req.session.sessionId});
 };
 
-const listingPage = async (req, res) => {
+const listingPage = (req, res) => {
      var listingId = req.params.id;
      console.log("GO TO: Listing Page with ID :"+ listingId);
 
-     await Room.find({_id: new Object(listingId)}, async function(err, result) {
-          await User.find({_id: new Object(result[0].owner_id)},  async function(err, users) {
-               await Review.find({room_id: new Object(listingId)}, function(err,reviews){
+     Room.find({_id: new Object(listingId)}, function(err, result) {
+          User.find({_id: new Object(result[0].owner_id)},   function(err, users) {
+               Review.find({room_id: new Object(listingId)}, function(err,reviews){
                     if (err) throw err;
                          res.render("listing", {id: req.session.sessionId, isSession: req.session.isLoggedIn, property: result[0], user:users[0],
                                    review: reviews});
@@ -30,11 +30,11 @@ const listingPage = async (req, res) => {
      });
 };
 
-const deleteListing = async (req, res) => {
+const deleteListing = (req, res) => {
      var id = req.params.id;
-     await Room.remove({_id: new Object(id)}, async function(err, res) {
+      Room.remove({_id: new Object(id)}, function(err, res) {
           if (err) throw err;
-          await User.find({_id: new Object(sessionId) }, async function(err, result) {
+           User.find({_id: new Object(sessionId) },  function(err, result) {
                if(err) {
                     console.log(err);
                } else {
@@ -49,7 +49,7 @@ const deleteListing = async (req, res) => {
                     console.log("description: "+result[0].description);
                     // console.table(result);
 
-                    await Room.find({owner_id: result[0]._id.toString()}, function(err, rooms){
+                     Room.find({owner_id: result[0]._id.toString()}, function(err, rooms){
                          if(err) {
                          console.log(err);
                          } else {
@@ -61,61 +61,10 @@ const deleteListing = async (req, res) => {
      });
 };
 
-// const uploadListing = (req, res) => {
-//      imageUploader.upload.array('images');
-//      for(var i = 0; i < imagePath.length; i++) {
-//           imageUploader.imagePath[i] = "../model/uploads/" + imageUploader.imagePath[i];
-//           console.log(imageUploader.imagePath[i]);
-//      }
-//      console.log("ROUTE: /uploadListing");
-//      const room = new Room({
-//           firstName: req.body.firstName,
-//           lastName: req.body.lastName,
-//           phoneNumber: req.body.phoneNumber,
-//           emailAddress: req.body.emailAddress,
-
-//           name: req.body.name,
-//           room_id: req.body.id,
-//           home_type: req.body.home_type,
-//           room_type: req.body.room_type,
-//           total_occupancy: req.body.total_occupancy,
-//           total_bedrooms: req.body.total_bedrooms,
-//           total_bathrooms: req.body.total_bathrooms,
-//           summary: req.body.summary,
-
-//           addressExactAddress: req.body.addressExactAddress,
-//           addressStreet: req.body.addressStreet,
-//           addressCity: req.body.addressCity,
-//           addressRegion: req.body.addressRegion,
-//           addressCountry: req.body.addressCountry,
-//           addressPostalCode: req.body.addressPostalCode,
-//           addressNearestLandmark: req.body.addressNearestLandmark,
-
-//           has_tv: req.body.has_tv,
-//           has_kitchen: req.body.has_kitchen,
-//           has_internet: req.body.has_internet,
-//           price: req.body.price,
-//           owner_id: sessionId,
-//           latitude: req.body.latitude,
-//           longitude: req.body.longitude,
-//           embeddedLink: req.body.embeddedLink,
-
-//           images: imageUploader.imagePath,
-//      });
-
-//      room.save(function(err) {
-//           imageUploader.clearImagePath();
-//           console.log("Length of imagePath: " + imageUploader.imagePath.length);
-//           if (err) throw err;
-//           response.redirect("/profile/"+req.session.sessionId);
-//           console.log("Listing Registration Success");
-//      });
-// };
-
-const submitReview = async (req, res) => {
+const submitReview =  (req, res) => {
      var room_ids = req.params.id;
  
-     await User.findById(req.session.sessionId, async function(err, user){
+      User.findById(req.session.sessionId, function(err, user){
          var review = new Review({
              room_id: room_ids,
              user_id: req.session.sessionId,
@@ -127,7 +76,7 @@ const submitReview = async (req, res) => {
              username: user.user_name,
          });
  
-         await review.save(function(err) {
+          review.save(function(err) {
              if (err) throw err;
              res.redirect("/listingPage/"+room_ids);
          });
@@ -139,6 +88,5 @@ module.exports = {
      addListing,
      listingPage,
      deleteListing,
-     // uploadListing,
      submitReview,
 };

@@ -25,11 +25,11 @@ const signup = (req, res) => {
      console.log('GO TO : Sign-Up Page');
 };
 
-const properties = async (req, res) => {
+const properties = (req, res) => {
      console.log("ROUTE: /properties");
      console.log('GO TO : Properties Page');
  
-     await Room.find({}, function(err,result){
+     Room.find({}, function(err,result){
          if(result.length === 0) {
              res.render("properties", {isSession: req.session.isLoggedIn, id: req.session.sessionId, properties: []});
              console.log("No Existing Properties");
@@ -49,9 +49,9 @@ const logout = (req, res) => {
      console.log("Logout: SUCCESS");
  }
 
-const profile = async (req, res) => {
+const profile = (req, res) => {
      console.log("ROUTE: /profile/:id");
-     await User.findById(req.session.sessionId , function(err, result) {
+      User.findById(req.session.sessionId , function(err, result) {
          if(err) {
              console.log(err);
          } else {
