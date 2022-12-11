@@ -30,16 +30,16 @@ const listingPage = (req, res) => {
      });
 };
 
-const deleteListing = (req, res) => {
+const deleteListing = (req, response) => {
      var id = req.params.id;
       Room.remove({_id: new Object(id)}, function(err, res) {
           if (err) throw err;
-           User.find({_id: new Object(sessionId) },  function(err, result) {
+           User.find({_id: new Object(req.session.sessionId) },  function(err, result) {
                if(err) {
                     console.log(err);
                } else {
                     console.log("GO TO: Profile Page");
-                    console.log("sessionId: " + sessionId);
+                    console.log("sessionId: " + req.session.sessionId);
                     console.log("firstName: "+result[0].firstName);
                     console.log("lastName: "+result[0].lastName);
                     console.log("user_name: "+result[0].user_name);
@@ -51,9 +51,9 @@ const deleteListing = (req, res) => {
 
                      Room.find({owner_id: result[0]._id.toString()}, function(err, rooms){
                          if(err) {
-                         console.log(err);
+                              console.log(err);
                          } else {
-                         response.render("profile", { isSession: true, id: sessionId, user: result[0], properties: rooms});
+                              response.render("profile", { isSession: req.session.isLoggedIn, id: req.session.sessionId, user: result[0], properties: rooms});
                          }
                     });
                }
